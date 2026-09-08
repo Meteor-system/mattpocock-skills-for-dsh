@@ -1,0 +1,9 @@
+# Matt Pocock Skills for DSH bundle patch.
+# The host-layer row publishes the vendored skills provider into the global
+# layer, so every preset can see the 11 model-invoked skills. The 14
+# disable-model-invocation skills stay out of model catalogs everywhere and
+# only answer the human /name entry point. The optional preset template adds
+# the light bootstrap plus the full standard toolset.
+- insert:
+    - id: mattpocock-skills-for-dsh
+      name: 'mattpocock-skills-for-dsh'

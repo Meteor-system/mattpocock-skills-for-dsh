@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const preset = join(root, 'preset')
+const skills = join(root, 'skills')
 const expected = {
   engineering: [
     'ask-matt', 'code-review', 'codebase-design', 'diagnosing-bugs', 'domain-modeling',
@@ -30,8 +31,14 @@ const bootstrap = await readFile(join(preset, 'mattpocock-bootstrap.mjs'), 'utf8
 if (!bootstrap.includes('mattpocock-skills:bootstrap:v2')) fail('bootstrap marker missing')
 if (bootstrap.includes('using-superpowers skill is loaded')) fail('bootstrap must not inject Superpowers')
 
+const provider = await readFile(join(root, 'lib', 'index.js'), 'utf8')
+if (!provider.includes("registerProvider")) fail('lib/index.js must register a skill provider')
+
+const manifest = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'))
+if (!manifest.dsh?.bundle?.patch) fail('package.json must declare dsh.bundle.patch')
+
 for (const [bucket, names] of Object.entries(expected)) {
-  const dir = join(preset, 'skills', bucket)
+  const dir = join(skills, bucket)
   const found = new Set((await readdir(dir, { withFileTypes: true })).filter((entry) => entry.isDirectory()).map((entry) => entry.name))
   for (const name of names) {
     if (!found.has(name)) fail('missing skill: ' + bucket + '/' + name)
@@ -45,4 +52,4 @@ for (const [bucket, names] of Object.entries(expected)) {
   }
 }
 
-if (!process.exitCode) console.log('verify ok: 25 skills, isolated roots, bootstrap v2')
+if (!process.exitCode) console.log('verify ok: 25 skills, bundle manifest, isolated roots, bootstrap v2')

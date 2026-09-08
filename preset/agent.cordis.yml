@@ -76,17 +76,13 @@
 
 # ── skills ──────────────────────────────────────────────────────────────────
 
-# The skill REGISTRY lives in the host composition and is layered per scope:
-# these rows register into THIS preset's layer of it, so they need no realm.
-# `skill-filesystem` contributes local-root discovery for agents on this preset, and
-# `tool-skill` gives them the catalog and loader; the merged catalog also
-# carries whatever the deployment registered globally (repository plugins).
-# DSH discovery is one level deep, so the two upstream buckets are separate
-# roots. `baseUrl` is this preset directory wherever it is installed.
-# `includeDefaultRoots: false` drops project/.dsh/skills, ~/.agents/skills,
-# and ~/.dsh/skills so this preset is not a dump of every personal skill.
-# Host plugins (notably superpowers-for-dsh) still register into the global
-# layer; bootstrap tells the model to ignore those names.
+# The skill REGISTRY lives in the host composition and is layered per scope.
+# The bundle (this repo) registers the 25 Matt Pocock skills into the GLOBAL
+# layer via lib/index.js, so any preset sees them; this preset additionally
+# keeps its own discovery roots pointing at the skills the installer copies
+# beside it, so a standalone install (no bundle) still works. Both sources
+# hold the same files, and the preset layer wins duplicates on its own scope.
+# `includeDefaultRoots: false` keeps project and ~/.agents skill roots out.
 - id: skill-filesystem
   name: '@deepseek-ai/dsh-skill-filesystem'
   config:

@@ -8,7 +8,8 @@ for (const arg of argv) {
 }
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const source = join(packageRoot, 'preset')
+const presetSource = join(packageRoot, 'preset')
+const skillsSource = join(packageRoot, 'skills')
 const userHome = process.env.USERPROFILE || process.env.HOME
 const dshHome = process.env.DSH_HOME || (userHome ? join(userHome, '.dsh') : undefined)
 if (!dshHome) throw new Error('Set DSH_HOME, USERPROFILE, or HOME before installing the preset.')
@@ -34,7 +35,11 @@ if (exists) {
 
 try {
   await mkdir(dirname(destination), { recursive: true })
-  await cp(source, destination, { recursive: true, force: false, errorOnExist: true })
+  // The preset composition lives in preset/; the skill bundles live at the
+  // package root and are copied beside it so a standalone preset (without the
+  // bundle installed) still discovers them.
+  await cp(presetSource, destination, { recursive: true, force: false, errorOnExist: true })
+  await cp(skillsSource, join(destination, 'skills'), { recursive: true, force: false, errorOnExist: true })
 } catch (error) {
   await rm(destination, { recursive: true, force: true })
   if (backup) await rename(backup, destination)

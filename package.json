@@ -1,12 +1,19 @@
 {
   "name": "mattpocock-skills-for-dsh",
-  "version": "0.1.0",
-  "description": "Matt Pocock Skills for the DeepSeek Harness: grilling, spec/ticket flows, TDD, and review as a portable DSH agent preset.",
+  "version": "0.2.0",
+  "description": "Matt Pocock Skills for the DeepSeek Harness: grilling, spec/ticket flows, TDD, and review as an installable bundle plus a portable agent preset.",
   "private": false,
   "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
   "files": [
+    "lib",
     "preset",
     "scripts",
+    "cordis.patch.yml",
     "README.md",
     "README.en.md",
     "NOTICE.md",
@@ -21,10 +28,16 @@
   "keywords": [
     "dsh",
     "deepseek-harness",
+    "plugin",
     "skills",
     "mattpocock",
     "preset"
   ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
   "author": "Meteor-system",
   "repository": {
     "type": "git",

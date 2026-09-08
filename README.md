@@ -1,22 +1,37 @@
 # Matt Pocock Skills for DSH
 
-这是 [Matt Pocock 的技能集](https://github.com/mattpocock/skills) 的 DSH 移植版：grilling、spec/ticket 流程、TDD、code review，装成**一个独立的 Agent 预设**。它不碰 host 配置，也刻意不和 Superpowers 那套塞在一起。
+这是 [Matt Pocock 的技能集](https://github.com/mattpocock/skills) 的 DSH 移植版：grilling、spec/ticket 流程、TDD、code review。做成一个可安装的 bundle + 一个独立 Agent 预设，可以和 Superpowers 并存。
 
 English: [README.en.md](README.en.md)
 
 ## 安装
 
-不走 `dsh plugin add`。这就是个用户预设，不是 host bundle：
+### 1. 装 bundle（把 25 个技能注册到全局技能层）
+
+```powershell
+npx @deepseek-ai/dsh plugin --profile web add github:Meteor-system/mattpocock-skills-for-dsh
+```
+
+也可以从本地 clone 装：
+
+```powershell
+git clone https://github.com/Meteor-system/mattpocock-skills-for-dsh.git
+npx @deepseek-ai/dsh plugin --profile web add C:\path\to\mattpocock-skills-for-dsh
+```
+
+### 2. 装预设模板
+
+在本仓库目录里跑：
 
 ```bash
-git clone https://github.com/Meteor-system/mattpocock-skills-for-dsh.git
-cd mattpocock-skills-for-dsh
 node scripts/install-preset.mjs
 ```
 
-如果已经装过同名的预设，加 `--force`，脚本会先备份一份带时间戳的旧版。
+预设会装到 `%USERPROFILE%\.dsh\.agent-presets\mattpocock-skills`。已有同名预设时加 `--force`，脚本会先备份一份带时间戳的旧版。
 
-装完**重启 DSH**，新开一个会话，预设选 **Matt Pocock Skills**。
+### 3. 重启，新开会话
+
+bundle 在 profile 启动时挂载。**重启 DSH**，刷新页面，新开一个会话，预设选 **Matt Pocock Skills**。旧会话保留原来那代预设，不能拿来验收。
 
 进新仓库之后先跑一次 `/setup-matt-pocock-skills`，它会配置这个仓库的 issue tracker、triage 标签和 `CONTEXT.md` 布局。后面一堆工程技能都要读 `docs/agents/*.md`，缺了它模型会停下来让你手动跑，不会自作主张。
 
@@ -112,9 +127,16 @@ node scripts/install-preset.mjs
 
 两个预设可以共存。一次会话只挂一个预设，工具和 prompt 不会互相叠加。
 
-有一点要注意：如果你的 profile 里装了 `superpowers-for-dsh` 这个 **host 插件**，那 14 个 Superpowers 技能名还是会出现在本预设的目录里——host 插件是全局注册的，预设管不到。bootstrap 已经写死让模型忽略它们。想让目录彻底干净，只能卸掉那个 host 插件。
+两边的技能都以 host 插件的形式全局注册，所以：
 
-这个预设自己关掉了默认技能根（`includeDefaultRoots: false`），不会去扫 `~/.agents/skills` 之类的个人目录。
+- Superpowers 会话的技能目录里会看到本套的 11 个 model-invoked 技能名（`tdd`、`grilling`…）；
+- Matt Pocock 会话的目录里会看到 Superpowers 那 14 个名字。
+
+各自的 bootstrap 会让模型忽略对方的名字。user-invoked 技能（那 14 个斜杠）两边都不会进模型目录，只有人打 `/名` 才出现。
+
+本预设自己关掉了默认技能根（`includeDefaultRoots: false`），不会去扫 `~/.agents/skills` 之类的个人目录。
+
+想让目录彻底干净，只能二选一：不装其中一套的 host 插件，或者接受「名字在、不 follow」。
 
 ## 校验
 

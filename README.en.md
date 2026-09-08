@@ -1,22 +1,47 @@
 # Matt Pocock Skills for DSH
 
-A portable DeepSeek Harness agent preset that vendors the 25 promoted skills from [mattpocock/skills](https://github.com/mattpocock/skills): grilling, spec/ticket flows, TDD, and review.
+A portable DeepSeek Harness (DSH) adaptation of [mattpocock/skills](https://github.com/mattpocock/skills): grilling, spec/ticket flows, TDD, and review, shipped as an installable bundle plus a standalone agent preset.
 
-This is not Superpowers. There is no "load a skill before every reply" bootstrap, and there is no host plugin.
+This is not Superpowers. There is no "load a skill before every reply" bootstrap.
 
 中文: [README.md](README.md)
 
-## Install
+## What is included
 
-```bash
+- The 25 promoted skills vendored from mattpocock/skills 1.2.3 (`skills/engineering`, `skills/productivity`).
+- A host-layer Cordis skill provider that registers them into the global skill layer. The 11 model-invoked skills show up in any preset's catalog; the 14 `disable-model-invocation` skills exist only for the human `/name` entry point.
+- A copyable Matt Pocock Skills agent preset with a light bootstrap covering invocation rules and DSH tool names.
+
+## Installation
+
+### 1. Install the bundle
+
+~~~powershell
+npx @deepseek-ai/dsh plugin --profile web add github:Meteor-system/mattpocock-skills-for-dsh
+~~~
+
+Or from a local clone:
+
+~~~powershell
 git clone https://github.com/Meteor-system/mattpocock-skills-for-dsh.git
-cd mattpocock-skills-for-dsh
+npx @deepseek-ai/dsh plugin --profile web add C:\path\to\mattpocock-skills-for-dsh
+~~~
+
+### 2. Install the preset template
+
+From this repository:
+
+~~~bash
 node scripts/install-preset.mjs
-```
+~~~
 
-Pass `--force` to back up an existing `mattpocock-skills` preset. Restart the DSH process, start a **new** session, and pick **Matt Pocock Skills**.
+Destination: `%USERPROFILE%\.dsh\.agent-presets\mattpocock-skills`. Pass `--force` to back up an existing copy.
 
-Run `/setup-matt-pocock-skills` once per repo (issue tracker, triage labels, `CONTEXT.md` layout). Engineering skills read `docs/agents/*.md`; if those files are missing the model will ask you to type that command, it will not start it for you.
+### 3. Restart and start a fresh session
+
+The bundle mounts at profile startup. Restart DSH, refresh the page, and pick **Matt Pocock Skills** in a new session. Existing sessions keep their original preset generation.
+
+Run `/setup-matt-pocock-skills` once per repo (issue tracker, triage labels, `CONTEXT.md` layout).
 
 ## How to use it
 
@@ -106,7 +131,9 @@ These appear in DSH `available_skills`. The model loads them with the `skill` to
 
 ## Living next to Superpowers
 
-Sessions do not mix toolsets. Superpowers names may still appear in the catalog if the `superpowers-for-dsh` host plugin is installed; the bootstrap tells the model to ignore them. This preset sets `includeDefaultRoots: false`, so it does not scan `~/.agents/skills`.
+Sessions do not mix toolsets. Both plugins register their skills globally, so each side's catalog shows the other's model-invoked names. Each bootstrap tells its model to ignore foreign names. The 14 Matt user-invoked skills never enter any model catalog; they answer only the `/name` entry point.
+
+This preset sets `includeDefaultRoots: false`, so it does not scan `~/.agents/skills`.
 
 ## Verify
 
