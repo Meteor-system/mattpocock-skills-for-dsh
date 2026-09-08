@@ -1,0 +1,37 @@
+{
+  "name": "mattpocock-skills-for-dsh",
+  "version": "0.1.0",
+  "description": "Matt Pocock Skills for the DeepSeek Harness: grilling, spec/ticket flows, TDD, and review as a portable DSH agent preset.",
+  "private": false,
+  "type": "module",
+  "files": [
+    "preset",
+    "scripts",
+    "README.md",
+    "README.en.md",
+    "NOTICE.md",
+    "UPSTREAM.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "install-preset": "node scripts/install-preset.mjs",
+    "verify": "node scripts/verify.mjs"
+  },
+  "license": "MIT",
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "skills",
+    "mattpocock",
+    "preset"
+  ],
+  "author": "Meteor-system",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Meteor-system/mattpocock-skills-for-dsh.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Meteor-system/mattpocock-skills-for-dsh/issues"
+  },
+  "homepage": "https://github.com/Meteor-system/mattpocock-skills-for-dsh#readme"
+}

@@ -1,0 +1,17 @@
+# Upstream pin
+
+- repo: https://github.com/mattpocock/skills
+- plugin version: 1.2.3
+- commit: 3cca18b368ae95cdbdebbff572ccafa662551015
+- date: 2026-09-04
+
+Included: the 25 promoted skills under `skills/engineering/` and `skills/productivity/`.
+
+Excluded on purpose: `skills/misc/`, `skills/in-progress/`, `skills/deprecated/`.
+
+To refresh, clone that commit (or a newer main), replace `preset/skills/engineering` and `preset/skills/productivity`, and update this pin.
+
+DSH notes:
+
+- `skill-filesystem.includeDefaultRoots` is false so personal/project skill roots stay out of this preset.
+- Superpowers names that still appear in a session catalog come from the host plugin `superpowers-for-dsh`, not from this directory. The bootstrap tells the model to ignore them.
