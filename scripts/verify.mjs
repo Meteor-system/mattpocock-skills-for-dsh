@@ -23,9 +23,10 @@ function fail(message) {
 }
 
 const composition = await readFile(join(preset, 'agent.cordis.yml'), 'utf8')
-for (const needle of ['includeDefaultRoots: false', 'mattpocock-bootstrap', 'skills/engineering/', 'skills/productivity/']) {
+for (const needle of ['includeDefaultRoots: false', 'mattpocock-bootstrap', 'skills/engineering/', 'skills/productivity/', 'prefix:', 'suffix:']) {
   if (!composition.includes(needle)) fail('agent.cordis.yml missing: ' + needle)
 }
+if (composition.includes('text:')) fail('agent.cordis.yml still uses removed persona text: field')
 
 const bootstrap = await readFile(join(preset, 'mattpocock-bootstrap.mjs'), 'utf8')
 if (!bootstrap.includes('mattpocock-skills:bootstrap:v2')) fail('bootstrap marker missing')
